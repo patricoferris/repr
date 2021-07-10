@@ -43,6 +43,11 @@ module Encode = struct
     let a = unstage a and b = unstage b and c = unstage c in
     stage (Bin.Triple.encode a b c)
 
+
+  let quad a b c d =
+    let a = unstage a and b = unstage b and c = unstage c and d = unstage d in
+    stage (Bin.Quad.encode a b c d)
+
   let option o =
     let o = unstage o in
     stage (Bin.Option.encode o)
@@ -86,6 +91,7 @@ module Encode = struct
   and tuple : type a. a tuple -> a encode_bin = function
     | Pair (x, y) -> pair (t x) (t y)
     | Triple (x, y, z) -> triple (t x) (t y) (t z)
+    | Quad (w, x, y, z) -> quad (t w) (t x) (t y) (t z)
 
   and map : type a b. boxed:bool -> (a, b) map -> b encode_bin =
    fun ~boxed { x; g; _ } ->
@@ -148,6 +154,10 @@ module Decode = struct
     let a = unstage a and b = unstage b and c = unstage c in
     stage (Bin.Triple.decode a b c)
 
+  let quad a b c d =
+    let a = unstage a and b = unstage b and c = unstage c and d = unstage d in
+    stage (Bin.Quad.decode a b c d)
+
   let option o =
     let o = unstage o in
     stage (Bin.Option.decode o)
@@ -195,6 +205,7 @@ module Decode = struct
   and tuple : type a. a tuple -> a decode_bin = function
     | Pair (x, y) -> pair (t x) (t y)
     | Triple (x, y, z) -> triple (t x) (t y) (t z)
+    | Quad (w, x, y, z) -> quad (t w) (t x) (t y) (t z)
 
   and map : type a b. boxed:bool -> (a, b) map -> b decode_bin =
    fun ~boxed { x; f; _ } ->
