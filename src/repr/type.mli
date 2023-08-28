@@ -27,3 +27,6 @@
 
 include Type_intf.Type
 (** @inline *)
+
+val to_type_core : 'a t -> 'a Type_core.t
+val of_type_core : 'a Type_core.t -> 'a t

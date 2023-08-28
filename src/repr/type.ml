@@ -556,3 +556,6 @@ struct
   let t : type v. v t -> v Map.t t =
    fun v -> map (seq (pair Map.key_t v)) Map.of_seq Map.to_seq
 end
+
+let of_type_core = Fun.id
+let to_type_core = Fun.id
