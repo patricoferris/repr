@@ -47,13 +47,13 @@ module Located (A : Ast_builder.S) (M : Monad.S) : S with module M = M = struct
     if polymorphic then pexp_variant name body
     else pexp_construct (Located.lident name) body
 
-  (** {[ |~ case0 "cons_name" (`)Cons_name ]} *)
+  (** {[
+        |~ case0 "cons_name" (`)Cons_name
+      ]} *)
   let variant_case0 ~lib ~polymorphic ~cons_name e =
     [%expr
-      [%e dsl ~lib `add_case]
-        [%e e]
-        ([%e dsl ~lib `case0]
-           [%e estring cons_name]
+      [%e dsl ~lib `add_case] [%e e]
+        ([%e dsl ~lib `case0] [%e estring cons_name]
            [%e construct ~polymorphic cons_name])]
 
   (** {[
@@ -63,8 +63,7 @@ module Located (A : Ast_builder.S) (M : Monad.S) : S with module M = M = struct
     let tuple_pat = idents >|= pvar |> ppat_tuple in
     let tuple_exp = idents >|= evar |> pexp_tuple in
     [%expr
-      [%e dsl ~lib `add_case]
-        [%e e]
+      [%e dsl ~lib `add_case] [%e e]
         ([%e dsl ~lib `case1] [%e estring cons_name] [%e component_type]
            (fun [%p tuple_pat] ->
              [%e construct ~polymorphic ~body:tuple_exp cons_name]))]
@@ -80,14 +79,15 @@ module Located (A : Ast_builder.S) (M : Monad.S) : S with module M = M = struct
   (** [|+ field "field_name" (field_type) (fun t -> t.field_name)] *)
   let record_field ~lib { field_name; field_repr } e =
     [%expr
-      [%e dsl ~lib `add_field]
-        [%e e]
+      [%e dsl ~lib `add_field] [%e e]
         ([%e dsl ~lib `field] [%e estring field_name] [%e field_repr] (fun t ->
              [%e pexp_field (evar "t") (Located.lident field_name)]))]
 
   (** Record composites are encoded as a constructor function
 
-      {[ fun field1 field2 ... fieldN -> { field1; field2; ...; fieldN }) ]} *)
+      {[
+        fun field1 field2 ... fieldN -> { field1; field2; ...; fieldN })
+      ]} *)
   let record_composite fields =
     let fields = fields >|= fun l -> l.pld_name.txt in
     let record =
@@ -96,7 +96,9 @@ module Located (A : Ast_builder.S) (M : Monad.S) : S with module M = M = struct
     in
     lambda fields record
 
-  (** {[ | Cons_name (x1, x2, x3) -> cons_name x1 x2 x3 ] ]} *)
+  (** {[
+        | Cons_name (x1, x2, x3) -> cons_name x1 x2 x3 ]
+      ]} *)
   let variant_pattern cons_name pattern n =
     let fparam_of_name name = String.lowercase_ascii name in
     match n with
@@ -133,7 +135,10 @@ module Located (A : Ast_builder.S) (M : Monad.S) : S with module M = M = struct
       in
       variant_pattern c.pcd_name.txt pattern n
     in
-    cs >|= pattern_of_cdecl |> pexp_function_cases |> lambda (cs >|= fparam_of_cdecl)
+    cs
+    >|= pattern_of_cdecl
+    |> pexp_function_cases
+    |> lambda (cs >|= fparam_of_cdecl)
 
   (** Analogous to {!variant_composite} but using AST fragments for polymorphic
       variants. *)

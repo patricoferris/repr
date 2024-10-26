@@ -143,7 +143,8 @@ module Located (A : Ast_builder.S) : S = struct
         [%e
           cases
             [%expr
-              T.variant variant_name [%e wrap_params (pexp_function_cases destructor)]]]
+              T.variant variant_name
+                [%e wrap_params (pexp_function_cases destructor)]]]
         |> T.sealv]
     in
     case ~lhs:pattern ~guard:None ~rhs

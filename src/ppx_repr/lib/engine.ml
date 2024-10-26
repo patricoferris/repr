@@ -277,7 +277,8 @@ module Located (Attributes : Attributes.S) (A : Ast_builder.S) : S = struct
            | Ptyp_alias (c, v) ->
                (* Push [v] to the bound stack, traverse the alias, then remove it. *)
                let c, acc =
-                 super#core_type c { acc with ctx_bound = v.txt :: acc.ctx_bound }
+                 super#core_type c
+                   { acc with ctx_bound = v.txt :: acc.ctx_bound }
                in
                let ctx_bound =
                  match acc.ctx_bound with

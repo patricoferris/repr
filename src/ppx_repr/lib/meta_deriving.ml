@@ -102,7 +102,7 @@ module Args = struct
 end
 
 (** Each plugin gets a flag in the main deriver corresponding to whether it's
-    activated or not. For instance, [\[@@deriving repr ~equal\]] indicates that
+    activated or not. For instance, [[@@deriving repr ~equal]] indicates that
     the "equal" plugin should be run on this type definition.
 
     Given the list of plugins [ p1; p2; ... pn ], we need to build:

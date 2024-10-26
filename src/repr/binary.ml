@@ -29,7 +29,7 @@ module Char = struct
     let pos = !pos_ref in
     pos_ref := pos + 1;
     buf.[pos]
-    [@@inline always]
+  [@@inline always]
 
   let sizer = Sizer.static 1
 end
@@ -47,7 +47,7 @@ module Int8 = struct
   let encode i k = k (charstring_of_code i)
 
   let decode buf pos_ref = Stdlib.Char.code (Char.decode buf pos_ref)
-    [@@inline always]
+  [@@inline always]
 end
 
 module Int16 = struct
